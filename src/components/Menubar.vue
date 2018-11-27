@@ -19,11 +19,11 @@
                 </ul>
             </div>
         </nav>
-        <div class="child-window" v-show="isChild" ref="child">
+        <div class="child-window" v-show="isChild" id="child" @click.stop="closePopup">
             <div class="container">
                 <div class="child-container">
-                    <button type="button" class="close" aria-label="Close" @click="childPopup">
-                        <span aria-hidden="true">&times;</span>
+                    <button type="button" class="close" aria-label="Close">
+                        <span aria-hidden="true" @click.stop="childPopup">&times;</span>
                     </button>
                     <form>
                         <div class="form-group">
@@ -63,6 +63,9 @@
         methods: {
             childPopup: function() {
                 this.isChild = !this.isChild ? true : false;                
+            },
+            closePopup: function(e) {
+                if(e.target.id === 'child') this.childPopup();
             }
         }
         
@@ -72,22 +75,26 @@
 <style lang="scss" scoped>
 
 .child-window {
-     position: absolute;
-     width: 20vw;
-     height: 100%;
-     top:0;
-     right:0;
-     background-color: #fff;
-     box-shadow: -1px 0px 80px 1px rgba(0, 0, 0, .2);
+    display: block;
+    position: fixed;
+    width: 100%;
+    height: 100%;          
+    top:0;
+    z-index:10;     
+    background-color: rgba(0,0,0,0.4);
 
-    .container {
-        z-index: 100;
+    .container {        
+        position: absolute;        
+        background-color: #fff;
+        width: 20vw;
+        height: 100%;        
+        right: 0;
 
         .child-container {
             display: flex;
             flex-direction: column;
 
-            button {                                
+            button {
                 margin-bottom: 3.5rem;
                 font-size: 3.5rem;
                 text-align: end;
